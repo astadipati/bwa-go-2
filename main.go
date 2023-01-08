@@ -2,10 +2,10 @@ package main
 
 import (
 	"bwastartup/user"
-	"fmt"
 	"log"
-	"os"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -25,6 +25,31 @@ func main() {
 	// fmt.Println(username)
 	// pass := os.Getenv("PASS")
 	// fmt.Println(pass)
+	// dsn := "root:Kul0nuwun@tcp(127.0.0.1:3306)/bwa_go?charset=utf8mb4&parseTime=True&loc=Local"
+	// db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	// if err != nil {
+	// 	log.Fatal(err.Error())
+	// }
+
+	// fmt.Println("Koneksi Ok")
+
+	// var users []user.User
+
+	// db.Find(&users)
+
+	// for _, user := range users {
+	// 	fmt.Println(user.Name)
+	// 	fmt.Println(user.Email)
+	// }
+	// Router disini
+	router := gin.Default()
+	router.GET("/handler", handler)
+	router.Run()
+}
+
+// membuat handler
+func handler(c *gin.Context) {
 	dsn := "root:Kul0nuwun@tcp(127.0.0.1:3306)/bwa_go?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
@@ -32,20 +57,9 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	fmt.Println("Koneksi Ok")
-
 	var users []user.User
-	length := len(users)
-	fmt.Println(length)
 
 	db.Find(&users)
 
-	length = len(users)
-	fmt.Println(length)
-	fmt.Printf("%s hh %s\n", os.Getenv("USER"), os.Getenv("PASSWORD"))
-
-	for _, user := range users {
-		fmt.Println(user.Name)
-		fmt.Println(user.Email)
-	}
+	c.JSON(http.StatusOK, users)
 }
