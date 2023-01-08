@@ -28,17 +28,14 @@ func main() {
 	}
 	// panggil instance koneksi
 	userRepository := user.NewRepository(db)
-	// panggil struct
-	user := user.User{
-		Name:           "doni",
-		Occupation:     "programmer",
-		Email:          "doni@gmail.com",
-		PasswordHash:   "123456",
-		AvatarFileName: "doni.jpg",
-		Role:           "admin",
-		// CreatedAt: "2023-01-01",
-	}
-	// punya fungsi save
-	userRepository.Save(user)
+	userService := user.NewService(userRepository)
+
+	userInput := user.RegisterUserInput{}
+	userInput.Name = "tes from service"
+	userInput.Email = "tes@gmail.com"
+	userInput.Occupation = "service"
+	userInput.Password = "password"
+
+	userService.RegisterUser(userInput)
 
 }
