@@ -1,7 +1,8 @@
 package handler
 
 import (
-	"bwastartup/user"
+	"bwa-go-2/helper"
+	"bwa-go-2/user"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,10 +28,12 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, nil)
 
-	user , err := h.userService.RegisterUser(input)
-	if err!= nil {
-        c.JSON(http.StatusBadRequest, nil)
-	}
-	c.JSON(http.StatusOK, user)
-}
+	user, err := h.userService.RegisterUser(input)
 
+	if err != nil {
+		c.JSON(http.StatusBadRequest, nil)
+	}
+	response := helper.APIresponse("Account has been tegistered", http.StatusOK, "success", user)
+
+	c.JSON(http.StatusOK, response)
+}
